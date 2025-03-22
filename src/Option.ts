@@ -15,6 +15,8 @@ class Option {
     ]
 
     public static log(): void {
+        console.log('WELCOME TO THE STORE \n------------------');
+
         this.mainOptions.forEach((option: string, index: number): void => {
             console.log(`${index + 1}. ${option}`);
         })

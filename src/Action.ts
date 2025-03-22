@@ -48,19 +48,17 @@ class Action extends Helper {
 
     protected static async updateProduct(): Promise<void> {
         this.pending('Update product');
-
-        const id: number = await new Question<number>("id: ", true).ask();
-        const product: Product | null = Store.get(id);
+        const product: Product | undefined = await this.checkProduct(true);
 
         if (!product) {
-            this.delayRestart('Id is not valid');
+            console.log("Product not found");
             return;
         }
 
         const name: string = await new Question<string>(`Name before(${product.name}): `).ask();
         const price: number = await new Question<number>(`Price before(${product.price}): `, true).ask();
 
-        Store.update(id, {
+        Store.update(product.id, {
             name: name.length > 0 ? name : product.name,
             price,
         });
@@ -70,16 +68,16 @@ class Action extends Helper {
 
     protected static async getProduct(): Promise<void> {
         this.pending('Detail product');
-        const id: number = await new Question<number>("id: ", true).ask();
 
         if (Store.getStore().length < 1) {
             return this.delayRestart('Store is empty');
         }
 
-        const product: Product | null = Store.get(id);
+        const product: Product | undefined = await this.checkProduct(true);
 
         if (!product) {
-            return this.delayRestart('Id is not valid');
+            console.log("Product not found");
+            return;
         }
 
         this.logActionsAndClear(product);
@@ -88,15 +86,14 @@ class Action extends Helper {
     protected static async deleteProduct(): Promise<void> {
         this.pending('Delete product');
 
-        const id: number = await new Question<number>("id: ", true).ask();
-        const product: Product | null = Store.get(id);
+        const product: Product | undefined = await this.checkProduct(true);
 
         if (!product) {
-            this.delayRestart('Id is not valid');
+            console.log("Product not found");
             return;
         }
 
-        Store.delete(id);
+        Store.delete(product.id);
 
         await this.restart()
     }

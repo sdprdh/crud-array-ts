@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "npx ts-node src/index.ts"
+    "dev": "node dist/Main.js"
   },
   "keywords": [],
   "author": "",

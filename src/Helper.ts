@@ -1,4 +1,7 @@
 import Option from "./Option.js";
+import {Question} from "./Question.js";
+import Product from "./Product.js";
+import Store from "./Store.js";
 
 class Helper {
     protected static async restart(): Promise<void> {
@@ -26,6 +29,18 @@ class Helper {
         console.table(data);
         console.log('-----\n');
         Option.log();
+    }
+
+    protected static async checkProduct(isReturn: boolean = false): Promise<Product | undefined> {
+        const id: number = await new Question<number>("id: ", true).ask();
+        const product: Product | null = Store.get(id);
+
+        if (!product) {
+            this.delayRestart('Id is not valid');
+            return undefined;
+        }
+
+        return isReturn ? product : undefined;
     }
 }
 
